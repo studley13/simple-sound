@@ -4,7 +4,7 @@ SOX=sox
 RATE=22100
 SOX_ARGS=-e signed-integer -c 1 -r $(RATE) -b 8 -t raw -
 
-all: sound outfile.wav spectrogram.png
+all: sound outfile.wav spectrogram.png outfile.mp3
 
 .PHONY:clean
 clean:
@@ -15,6 +15,9 @@ sound: sound.c
 
 outfile.wav: sound
 	./sound | $(SOX) $(SOX_ARGS) $@
+
+outfile.mp3: outfile.wav
+	ffmpeg -v quiet -y -i $^ $@
 
 spectrogram.png: sound
 	./sound | $(SOX) $(SOX_ARGS) -n spectrogram
